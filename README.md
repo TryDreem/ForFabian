@@ -51,12 +51,22 @@ docker compose exec db psql -U aerdrya -d numbers_db \
 
 ## Tests
 
+Requires Python 3.12 (the same version as the Docker image):
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 pytest
 ruff check . && ruff format --check .
 ```
+
+Or without a local Python, in a throwaway container:
+
+```bash
+docker run --rm -v "$PWD":/code -w /code python:3.12-slim \
+  sh -c "pip install -q -r requirements-dev.txt && pytest -p no:cacheprovider"
+```
+
 Tests use an in-memory SQLite database, so no Postgres is needed.
 
 ## Structure

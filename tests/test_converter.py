@@ -14,6 +14,11 @@ def test_number_to_text(number: int, text: str) -> None:
     assert number_to_text(number) == text
 
 
+def test_convert_pending_with_empty_table(session: Session) -> None:
+    assert convert_pending(session) == 0
+    assert session.scalars(select(NumberWord)).all() == []
+
+
 def test_convert_pending_only_converts_new_numbers(session: Session) -> None:
     session.add_all([RandomNumber(value=7), RandomNumber(value=42)])
     session.commit()
