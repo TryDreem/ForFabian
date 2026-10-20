@@ -101,6 +101,14 @@ Key classes:
 Shared code (schemas, message contracts) goes into a small internal package, versioned
 and installed into each service image.
 
+### Design principles
+
+- **Single responsibility:** today `main.py` only handles HTTP and `services/` holds the logic;
+  in the target layout the same split is kept, and only `JobPublisher` / `JobConsumer` know the broker.
+- **Open/closed:** a new language is a new `NumberToTextConverter` implementation, nothing else changes.
+- **Dependency inversion:** use-cases depend on repository and converter interfaces, not on
+  SQLAlchemy or RabbitMQ, so tests can use in-memory fakes.
+
 ## 4. Data & contracts
 
 - Each service owns its tables (database-per-service as a goal; one Postgres instance with separate
